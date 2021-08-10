@@ -1,5 +1,9 @@
-let currentResult = 0;
+const defaultResult = 0;
+
+let currentResult = defaultResult;
 
 currentResult = (currentResult + 10) * 4;
 
-outputResult(currentResult, '')
+let calculationDescription = '('+defaultResult+' + 10) * 4';
+
+outputResult(currentResult, calculationDescription)
