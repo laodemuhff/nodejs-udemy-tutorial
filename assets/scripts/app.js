@@ -9,8 +9,8 @@ function add(num1, num2){
 
 currentResult = add(10,10);
 
-currentResult = (currentResult + 10) * 4; 
+let calculationDescription = `(${currentResult} + 10) * 4`;
 
-let calculationDescription = `(${defaultResult} + 10) * 4`;
+currentResult = (currentResult + 10) * 4; 
 
 outputResult(currentResult, calculationDescription)
