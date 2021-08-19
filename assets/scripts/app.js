@@ -32,7 +32,7 @@ function writeToLog(
 function add(){
     const enteredNumber = getUserInput()
     const initialResult = currentResult
-    currentResult += parseInt(enteredNumber);
+    currentResult += enteredNumber;
     // alert(++currentResult)
     createAndWriteOutput('+', initialResult, enteredNumber);
     writeToLog('ADD', initialResult, enteredNumber, currentResult)
@@ -41,7 +41,7 @@ function add(){
 function substract(){
     const enteredNumber = getUserInput()
     const initialResult = currentResult
-    currentResult -= parseInt(enteredNumber);
+    currentResult -= enteredNumber;
     createAndWriteOutput('-', initialResult, enteredNumber);
     writeToLog('SUBSTRACT', initialResult, enteredNumber, currentResult)
 }
@@ -49,7 +49,7 @@ function substract(){
 function multiply(){
     const enteredNumber = getUserInput()
     const initialResult = currentResult
-    currentResult *= parseInt(enteredNumber);
+    currentResult *= enteredNumber;
     createAndWriteOutput('*', initialResult, enteredNumber);
     writeToLog('MULTIPLY', initialResult, enteredNumber, currentResult)
 }
@@ -57,7 +57,7 @@ function multiply(){
 function divide(){
     const enteredNumber = getUserInput()
     const initialResult = currentResult
-    currentResult /= parseInt(enteredNumber);
+    currentResult /= enteredNumber;
     createAndWriteOutput('/', initialResult, enteredNumber);
     writeToLog('DIVIDE', initialResult, enteredNumber, currentResult)
 }
@@ -66,3 +66,5 @@ addBtn.addEventListener('click', add)
 subtractBtn.addEventListener('click', substract)
 multiplyBtn.addEventListener('click', multiply)
 divideBtn.addEventListener('click', divide)
+
+createAndWriteOutput() 
