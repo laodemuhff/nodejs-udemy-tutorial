@@ -1,80 +1,65 @@
-const defaultResult = 0;
-let currentResult = defaultResult;
-const logEntries = []  ;
-// Gets input form input field
-function getUserInput(){
-    return parseInt(userInput.value)
+const maximumLife = 100;
+let isFinish = false;
+
+const hero = {
+    name : "Goku",
+    maximumAttackPower : 30,
+    currentLifeBar : maximumLife
 }
 
-// Generates and writes calculation log
-function createAndWriteOutput(operator, resultBeforeCalc, calcNumber){
-    const calcDescription = `${resultBeforeCalc} ${operator} ${calcNumber}`;
-    outputResult(currentResult, calcDescription); // from vendor file
+const monster = {
+    name : "Cell",
+    maximumAttackPower : 30,
+    currentLifeBar : maximumLife
 }
 
-function writeToLog(
-    operatorName,
-    prevResult,
-    enteredNumber,
-    result
-){
-    const entryLog = {
-        enteredNumber,
-        operatorName,
-        prevResult,
-        result
+adjustHealthBars(maximumLife);
+
+function resetState(sprites, timeout){
+    // stand again after doing action
+    setTimeout(() => {
+        sprites.standing()
+    }, timeout);
+}
+
+function cekWin(){
+    // cek the result
+    if(monster.currentLifeBar <= 0 && hero.currentLifeBar > 0){
+        monster_sprites.dead()
+        setTimeout(()=>{alert(`You've Win !`)}, 1300);
+        isFinish = true;
+
+    }else if(monster.currentLifeBar > 0 && hero.currentLifeBar <= 0){
+        hero_sprites.dead()
+        setTimeout(()=>{alert(`You've Lost !`)}, 1300);
+        isFinish = true;
+        
+    }else if(monster.currentLifeBar <= 0 && hero.currentLifeBar <= 0){
+        alert(`It's a Draw !`)
+        isFinish = true;
     }
+}
+
+function attack(){
+    // animate punch
+    hero_sprites.punch()
+    resetState(hero_sprites, 800)
     
-    logEntries.push(entryLog)
-    console.log(logEntries);
-}
-
-function calculateResult(operatorName){
-    const enteredNumber = getUserInput();
-    const initialResult = currentResult;
-    let operator;
-
-    if(operatorName === 'ADD'){
-        currentResult += enteredNumber;
-        operator = '+';    
+    const demageToMonster = dealMonsterDamage(hero.maximumAttackPower);
+    monster.currentLifeBar -= demageToMonster;
+    cekWin()
+    
+    // wait for 2.5 second for monster to respond
+    if(!isFinish){
+        setTimeout(function(){
+            monster_sprites.kick()
+            resetState(monster_sprites, 1200)
+    
+            const demageToHero = dealPlayerDamage(monster.maximumAttackPower);
+            hero.currentLifeBar -= demageToHero;
+            cekWin()
+        }, 2500);
     }
-
-    if(operatorName === 'SUBSTRACT'){
-        currentResult -= enteredNumber;
-        operator = '-';
-    }
-
-    if(operatorName === 'MULTIPLY'){
-        currentResult *= enteredNumber;
-        operator = '*';
-    }
-
-    if(operatorName === 'DIVIDE'){
-        currentResult /= enteredNumber;
-        operator = '/';
-    }
-
-    createAndWriteOutput(operator, initialResult, enteredNumber);
-    writeToLog(operatorName, initialResult, enteredNumber, currentResult)
 }
 
-function add(){
-    calculateResult('ADD');
-}  
-
-function substract(){
-    calculateResult('SUBSTRACT');
-}
-
-function multiply(){
-    calculateResult('MULTIPLY');
-}
-
-function divide(){
-    calculateResult('DIVIDE');
-}
-
-addBtn.addEventListener('click', add)
-subtractBtn.addEventListener('click', substract)
-multiplyBtn.addEventListener('click', multiply)
-divideBtn.addEventListener('click', divide)
+attackBtn.addEventListener('click', attack)
