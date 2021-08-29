@@ -2,6 +2,7 @@
 const hero_standing_animation = "assets/sprites/goku/state-normal-2/standing-animation.png";
 const hero_state_punch_animation = "assets/sprites/goku/state-punch/state-punch-animation.png";
 const hero_state_dead_animation = "assets/sprites/goku/state-dead/dead-animation.png";
+const hero_state_heal_animation = "assets/sprites/goku/state-heal/state-heal-animation.png";
 const monster_standing_animation = "assets/sprites/cell/standing/standing-animation.png";
 const monster_state_kick_animation = "assets/sprites/cell/kick/state-kick-animation.png";
 const monster_state_dead_animation = "assets/sprites/cell/demaged/dead-animation.png";
@@ -37,6 +38,16 @@ const hero_state_dead_options = {
     clip: hero_state_dead_animation,
     elementId : "hero-sprites",
     timer: 170
+}
+
+const hero_state_heal_options = {
+    width: 110,
+    height: 158,
+    frameHeight: 157,
+    frames: 5,
+    clip: hero_state_heal_animation,
+    elementId : "hero-sprites",
+    timer: 210
 }
 
 const monster_standing_options = {
@@ -81,6 +92,10 @@ const hero_sprites = {
     dead : () => {
         currentHeroAnimation = animate(hero_state_dead_options, currentHeroAnimation)
         setTimeout(()=>{clearInterval(currentHeroAnimation)},1300);
+    },
+
+    heal : () => {
+        currentHeroAnimation = animate(hero_state_heal_options, currentHeroAnimation)
     }
 };
 

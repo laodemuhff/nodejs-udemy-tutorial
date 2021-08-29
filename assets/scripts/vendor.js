@@ -1,6 +1,6 @@
 const monsterHealthBar = document.getElementById('monster-health');
 const playerHealthBar = document.getElementById('player-health');
-const bonusLifeEl = document.getElementById('bonus-life');
+// const bonusLifeEl = document.getElementById('bonus-life');
 
 const attackBtn = document.getElementById('attack-btn');
 const strongAttackBtn = document.getElementById('strong-attack-btn');
@@ -26,8 +26,14 @@ function dealPlayerDamage(damage) {
   return dealtDamage;
 }
 
-function increasePlayerHealth(healValue) {
+function increasePlayerHealth(heal) {
+  const healValue = Math.random() * heal;
   playerHealthBar.value = +playerHealthBar.value + healValue;
+  return healValue;
+}
+
+function undoPlayerHealthAfterDeath(heal){
+    playerHealthBar.value = 0 + heal;
 }
 
 function resetGame(value) {
@@ -36,7 +42,12 @@ function resetGame(value) {
 }
 
 function removeBonusLife() {
+  const bonusLifeEl = document.getElementById('bonus-life');
   bonusLifeEl.parentNode.removeChild(bonusLifeEl);
+}
+
+function addBonusLife() {
+  document.getElementById('player-health-bonus').innerHTML = 'PLAYER HEALTH<span id="bonus-life">1</span>'
 }
 
 function setPlayerHealth(health) {
