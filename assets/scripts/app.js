@@ -268,15 +268,71 @@ function writeToLog(data){
 }
 
 function showLog(){
+
+    // ==> only print index 0, baceuse after i becoming 1 it will never again reach i++ hence it will still skip until forof ends
+    // let i = 0;
+    // for (const lg of log) {
+    //     if(i === 1) continue;
+    //     console.log(`${i}`);
+    //     for (const key in lg) {
+    //         if (key === 'event') {
+    //             continue;
+    //         }
+    //         console.log(`${key} ==> ${lg[key]}`);
+    //     }
+    //     i++;
+    // }
+
+    // ==> everthing will be skipped except for console log "test" because it will never again reach i++ hence every index got skipped.
     let i = 0;
-    for(const lg of log){
-        
-        console.log(`#${i}`);
-        for(const key in lg){
-            console.log(`${key} => ${lg[key]}`);
-        } 
+    for (const lg of log) {
+        console.log('test');
+        if(i === 0) continue;
+        console.log(`${i}`);
+        for (const key in lg) {
+            if (key === 'event') {
+                continue;
+            }
+            console.log(`${key} ==> ${lg[key]}`);
+        }
         i++;
     }
+
+
+    // ==> index 0 will skipped, the rest is still executed beacause i++ still gonna happen after every iteration
+    // for (let index = 0; index < log.length; index++) {
+    //     if(index == 0){
+    //         continue;
+    //     }
+
+    //     const element = log[index];
+    //     console.log(`#${index}`);
+    //     for(const key in element){
+    //         if(key === "event"){
+    //             continue;
+    //         }
+    //         console.log(`${key} => ${element[key]}`);
+    //     } 
+    // }
+
+    // ==>infinity loop (be carefull with while loop when using continue or break)
+    // let index = 0;
+    // do{
+    //     console.log('test');
+    //     if(index == 0){
+    //         continue;
+    //     }
+    //     console.log(`${index}`)
+    //     for (const key in log[index]) {
+    //         if (key == 'event') {
+    //             continue;
+    //         }
+    //         console.log(`${key} => ${log[index][key]}`);
+    //     }
+    //     index++;
+    // }while(index < log.length);
+   
+   
 }
 
 attackBtn.addEventListener('click', attack)
