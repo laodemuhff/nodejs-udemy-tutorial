@@ -24,6 +24,7 @@ const monster = {
 
 let isFinish;
 let hasBonusLife;
+let lastLogEntry;
 
 init();
 
@@ -267,7 +268,15 @@ function writeToLog(data){
 }
 
 function showLog(){
-    console.log(log);
+    let i = 0;
+    for(const lg of log){
+        
+        console.log(`#${i}`);
+        for(const key in lg){
+            console.log(`${key} => ${lg[key]}`);
+        } 
+        i++;
+    }
 }
 
 attackBtn.addEventListener('click', attack)
