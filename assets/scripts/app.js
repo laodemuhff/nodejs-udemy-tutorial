@@ -6,20 +6,17 @@ const LOG_EVENT_MONSTER_ATTACK = 'LOG EVENT MONSTER ATTACK';
 const LOG_EVENT_HERO_HEAL = 'LOG EVENT HERO HEAL';
 const LOG_EVENT_HERO_UNDO_DEATH = 'LOG EVENT HERO UNDO DEATH';
 const log = [];
-const maximumLife = 100;
 
 const hero = {
-    name : "Goku",
-    maximumAttackPower : 30,
-    maximumStrongAttackPower : 60,
-    maximumHeal : 10,
-    currentLifeBar : maximumLife
+    name: "Goku",
+    maximumAttackPower: 30,
+    maximumStrongAttackPower: 60,
+    maximumHeal: 10
 }
 const monster = {
-    name : "Cell",
-    maximumAttackPower : 50,
-    maximumHeal : 15,
-    currentLifeBar : maximumLife
+    name: "Cell",
+    maximumAttackPower: 50,
+    maximumHeal: 15
 }
 
 let isFinish;
@@ -28,17 +25,33 @@ let lastLogEntry;
 
 init();
 
-function init(){
-    hero.currentLifeBar = maximumLife;
-    monster.currentLifeBar = maximumLife;
+function init() {
 
     isFinish = false;
     hasBonusLife = true;
 
+    const maximumLife = getMaximumLife();
+
+    monster.currentLifeBar = maximumLife;
+    hero.currentLifeBar = maximumLife;
+
     adjustHealthBars(maximumLife);
 }
 
-function restartGame(){
+function getMaximumLife() {
+    const enteredNumber = prompt('Enter Maximum Value : ', 100);
+
+    const parsedNumber = parseInt(enteredNumber);
+    console.log(parsedNumber);
+
+    if (isNaN(parsedNumber) || parsedNumber < 0) {
+        throw { message: 'Invalid user input, not a number !' };
+    }
+
+    return parsedNumber;
+}
+
+function restartGame() {
     init();
     resetState(hero_sprites, 1000)
     resetState(monster_sprites, 1000)
@@ -47,112 +60,112 @@ function restartGame(){
     enabledButton();
 }
 
-function resetState(sprites, timeout){
+function resetState(sprites, timeout) {
     // stand again after doing action
     setTimeout(() => {
         sprites.standing()
     }, timeout);
 }
 
-function cekWin(){
+function cekWin() {
     // cek the result
-    if(monster.currentLifeBar <= 0 && hero.currentLifeBar > 0){
+    if (monster.currentLifeBar <= 0 && hero.currentLifeBar > 0) {
         monster_sprites.dead()
-        setTimeout(()=>{
-            if(confirm(`You've Win !, Restart the Game ?`)){
+        setTimeout(() => {
+            if (confirm(`You've Win !, Restart the Game ?`)) {
                 restartGame()
             }
         }, 1300);
         isFinish = true;
 
-    }else if(monster.currentLifeBar > 0 && hero.currentLifeBar <= 0){
+    } else if (monster.currentLifeBar > 0 && hero.currentLifeBar <= 0) {
         hero_sprites.dead()
 
-        if(hasBonusLife){
+        if (hasBonusLife) {
             setTimeout(() => {
-                if(confirm(`You're dead by now, but you still have 1 bonus life, are you want to use it?`)){
+                if (confirm(`You're dead by now, but you still have 1 bonus life, are you want to use it?`)) {
                     hasBonusLife = false;
-            
+
                     removeBonusLife();
                     undoDeath();
-                }else{
-                    if(confirm(`You've Lost !, Restart the Game ?`)){
+                } else {
+                    if (confirm(`You've Lost !, Restart the Game ?`)) {
                         restartGame()
                     }
                 }
             }, 1300)
-        }else{
-            setTimeout(()=>{
-                if(confirm(`You've Lost !, Restart the Game ?`)){
+        } else {
+            setTimeout(() => {
+                if (confirm(`You've Lost !, Restart the Game ?`)) {
                     restartGame()
                 }
             }, 1300);
             isFinish = true;
         }
-        
-    }else if(monster.currentLifeBar <= 0 && hero.currentLifeBar <= 0){
-        if(confirm(`It's a Draw !, Restart the Game ?`)){
+
+    } else if (monster.currentLifeBar <= 0 && hero.currentLifeBar <= 0) {
+        if (confirm(`It's a Draw !, Restart the Game ?`)) {
             restartGame()
         }
         isFinish = true;
     }
 }
 
-function setModeAttack(mode){
+function setModeAttack(mode) {
     let maxAttack;
     let logAttack;
     const prevLifeBar = monster.currentLifeBar;
 
-    maxAttack = mode === BASIC_ATTACK ? 
-                hero.maximumAttackPower : 
-                hero.maximumStrongAttackPower;
+    maxAttack = mode === BASIC_ATTACK ?
+        hero.maximumAttackPower :
+        hero.maximumStrongAttackPower;
 
-    logAttack = mode === BASIC_ATTACK ? 
-                LOG_EVENT_HERO_BASIC_ATTACK: 
-                LOG_EVENT_HERO_STRONG_ATTACK;
+    logAttack = mode === BASIC_ATTACK ?
+        LOG_EVENT_HERO_BASIC_ATTACK :
+        LOG_EVENT_HERO_STRONG_ATTACK;
 
     disabledButton()
 
     // animate punch
     hero_sprites.punch()
     resetState(hero_sprites, 800)
-    
+
     const demageToMonster = dealMonsterDamage(maxAttack);
     monster.currentLifeBar -= demageToMonster;
     cekWin()
 
-    if(!isFinish){
+    if (!isFinish) {
         monsterResponse()
     }
 
     writeToLog({
-        event : logAttack,
-        target : 'MONSTER',
-        dealtDemage : demageToMonster,
-        prevTargetHealth : prevLifeBar,
-        currentTargetHealth : monster.currentLifeBar
+        event: logAttack,
+        target: 'MONSTER',
+        dealtDemage: demageToMonster,
+        prevTargetHealth: prevLifeBar,
+        currentTargetHealth: monster.currentLifeBar
     });
 }
 
-function changeBtnProperties(btn, isDisabled){
-    if(isDisabled){
+function changeBtnProperties(btn, isDisabled) {
+    if (isDisabled) {
         btn.disabled = true;
         btn.style.background = "grey";
-    }else{
+    } else {
         btn.disabled = false;
         btn.style.background = "#ff0062";
     }
 }
 
-function disabledButton(){
+function disabledButton() {
     changeBtnProperties(attackBtn, true)
     changeBtnProperties(strongAttackBtn, true)
     changeBtnProperties(healBtn, true)
     changeBtnProperties(logBtn, true)
 }
 
-function enabledButton(){
-    setTimeout(()=>{
+function enabledButton() {
+    setTimeout(() => {
         changeBtnProperties(attackBtn, false)
         changeBtnProperties(strongAttackBtn, false)
         changeBtnProperties(healBtn, false)
@@ -160,9 +173,9 @@ function enabledButton(){
     }, 1000);
 }
 
-function monsterResponse(){
-     // wait for 2.5 second for monster to respond
-    setTimeout(function(){
+function monsterResponse() {
+    // wait for 2.5 second for monster to respond
+    setTimeout(function () {
         const prevLifeBar = hero.currentLifeBar;
 
         monster_sprites.kick()
@@ -175,24 +188,24 @@ function monsterResponse(){
         enabledButton();
 
         writeToLog({
-            event : LOG_EVENT_MONSTER_ATTACK,
-            target : 'HERO',
-            dealtDemage : demageToHero,
-            prevTargetHealth : prevLifeBar,
-            currentTargetHealth : hero.currentLifeBar
+            event: LOG_EVENT_MONSTER_ATTACK,
+            target: 'HERO',
+            dealtDemage: demageToHero,
+            prevTargetHealth: prevLifeBar,
+            currentTargetHealth: hero.currentLifeBar
         });
     }, 2500);
 }
 
-function attack(){
+function attack() {
     setModeAttack(BASIC_ATTACK);
 }
 
-function strongAttack(){
+function strongAttack() {
     setModeAttack(STRONG_ATTACK);
 }
 
-function heal(){
+function heal() {
     const prevLifeBar = hero.currentLifeBar;
 
     disabledButton();
@@ -202,72 +215,73 @@ function heal(){
     resetState(hero_sprites, 1500)
 
     const healValue = increasePlayerHealth(hero.maximumHeal)
-    if(hero.currentLifeBar + healValue > maximumLife){
+    if (hero.currentLifeBar + healValue > maximumLife) {
         hero.currentLifeBar = maximumLife
-    }else{
+    } else {
         hero.currentLifeBar += healValue
     }
-  
+
     cekWin()
 
-    if(!isFinish){
+    if (!isFinish) {
         monsterResponse()
     }
 
     writeToLog({
-        event : LOG_EVENT_HERO_HEAL,
-        target : 'HERO',
-        addedHealth : healValue,
-        prevTargetHealth : prevLifeBar,
-        currentTargetHealth : hero.currentLifeBar
+        event: LOG_EVENT_HERO_HEAL,
+        target: 'HERO',
+        addedHealth: healValue,
+        prevTargetHealth: prevLifeBar,
+        currentTargetHealth: hero.currentLifeBar
     });
 }
 
-function undoDeath(){
+function undoDeath() {
     const prevLifeBar = hero.currentLifeBar;
 
     disabledButton();
-            
+
     // animate heal
     hero_sprites.heal()
     resetState(hero_sprites, 1500)
 
     undoPlayerHealthAfterDeath(hero.maximumHeal)
     hero.currentLifeBar = 0 + hero.maximumHeal
-    
+
     monsterResponse()
 
     writeToLog({
-        event : LOG_EVENT_HERO_UNDO_DEATH,
-        target : 'HERO',
-        addedHealth : hero.maximumHeal,
-        prevTargetHealth : prevLifeBar,
-        currentTargetHealth : hero.currentLifeBar
+        event: LOG_EVENT_HERO_UNDO_DEATH,
+        target: 'HERO',
+        addedHealth: hero.maximumHeal,
+        prevTargetHealth: prevLifeBar,
+        currentTargetHealth: hero.currentLifeBar
     });
 }
 
-function writeToLog(data){
+function writeToLog(data) {
 
     const obj = {
-        event : data.event,
-        target : data.target,
-        prevTargetHealth : data.prevTargetHealth,
-        currentTargetHealth : data.currentTargetHealth
+        event: data.event,
+        target: data.target,
+        prevTargetHealth: data.prevTargetHealth,
+        currentTargetHealth: data.currentTargetHealth
     };
 
-    if( data.event === LOG_EVENT_HERO_BASIC_ATTACK  || 
-        data.event === LOG_EVENT_HERO_STRONG_ATTACK || 
-        data.event === LOG_EVENT_MONSTER_ATTACK){
-            obj.dealtDemage = data.dealtDemage ?? null;
+    if (data.event === LOG_EVENT_HERO_BASIC_ATTACK ||
+        data.event === LOG_EVENT_HERO_STRONG_ATTACK ||
+        data.event === LOG_EVENT_MONSTER_ATTACK) {
+        obj.dealtDemage = data.dealtDemage ?? null;
 
-    }else if(data.event === LOG_EVENT_HERO_HEAL || data.event === LOG_EVENT_HERO_UNDO_DEATH){
-            obj.addedHealth = data.addedHealth ?? null;
+    } else if (data.event === LOG_EVENT_HERO_HEAL || data.event === LOG_EVENT_HERO_UNDO_DEATH) {
+        obj.addedHealth = data.addedHealth ?? null;
     }
 
+    z
     log.push(obj);
 }
 
-function showLog(){
+function showLog() {
 
     // ==> only print index 0, baceuse after i becoming 1 it will never again reach i++ hence it will still skip until forof ends
     // let i = 0;
@@ -287,7 +301,7 @@ function showLog(){
     let i = 0;
     for (const lg of log) {
         console.log('test');
-        if(i === 0) continue;
+        if (i === 0) continue;
         console.log(`${i}`);
         for (const key in lg) {
             if (key === 'event') {
@@ -331,8 +345,12 @@ function showLog(){
     //     }
     //     index++;
     // }while(index < log.length);
-   
-   
+
+    // you cant use break on foreach
+    // ketika mau merubah data/collection dalam jumlah yang banyak sebaiknya pakai forEach.
+    array.forEach(element => {
+        
+    });
 }
 
 attackBtn.addEventListener('click', attack)
