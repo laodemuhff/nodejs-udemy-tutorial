@@ -8,7 +8,10 @@ function printMessage() {
 }
 
 function addListener() {
-  clickableBtn.addEventListener('click', printMessage);
+  clickableBtn.addEventListener('click', () => {
+    const value = messageInput.value;
+    console.log(value || 'Clicked me!');
+  });
 }
 
 addListenerBtn.addEventListener('click', addListener);
