@@ -94,18 +94,18 @@
 
 
 
-// spread operator
+// spread(...) operator
 
-// const data = ["Farhan", "Fauzan", "S.kom"]
-// // const copiedData = ...data // error
-// const copiedData = [...data]
-// data.push("M.kom");
-// console.log(data, copiedData);
+// const data = ["Farhan", "Fauzan", "S.Kom"]
+// // const copiedData = ...data (error will happen)
+// const copiedData = [...data] 
+// copiedData[2] = "M.kom"
+// console.log(data,copiedData)
 
 
-// const numbers = [2,5,12,4];
-// // console.log(Math.min(numbers)); // error
-// console.log(Math.min(...numbers));
+const numbers = [2,5,12,4];
+// console.log(Math.min(numbers)); // error
+console.log(Math.min(...numbers));
 
 // be careful with objects !
 const products = [
@@ -144,3 +144,11 @@ const copiedProducts2 = [...products].map(product => ({
 copiedProducts2[0].price = 800;
 copiedProducts2[0].sizes[0] = 'SM'
 console.log(copiedProducts2, products);
+
+const dataName = ["Farhan", "Fauzan", "S.Kom", 3.8, 23]
+const [fistName, lastName, ...otherInfo] = dataName
+console.log(otherInfo)
+
+const testVar = 100
+const copiedTestVar = [...testVar]
+console.log(copiedTestVar);
