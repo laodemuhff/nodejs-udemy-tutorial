@@ -1,105 +1,49 @@
-const startGameBtn = document.getElementById('start-game-btn');
+// set
+const person1 = {name : "Farhan"}
+const personData = new Map([
+	[person1, [{"age": 25}]],
+	["salary", 2500000]
+])
+console.log(personData.get(person1)) // [ Object ]
+console.log(personData.get("salary")) // 2500000
 
-const ROCK = 'ROCK';
-const PAPER = 'PAPER';
-const SCISSORS = 'SCISSORS';
-const DEFAULT_USER_CHOICE = ROCK;
-const RESULT_DRAW = 'DRAW';
-const RESULT_PLAYER_WINS = 'PLAYER_WINS';
-const RESULT_COMPUTER_WINS = 'COMPUTER_WINS';
-
-let gameIsRunning = false;
-
-const getPlayerChoice = () => {
-  const selection = prompt(
-    `${ROCK}, ${PAPER} or ${SCISSORS}?`,
-    ''
-  ).toUpperCase();
-  if (selection !== ROCK && selection !== PAPER && selection !== SCISSORS) {
-    alert(`Invalid choice! We chose ${DEFAULT_USER_CHOICE} for you!`);
-    return;
-  }
-  return selection;
-};
-
-const getComputerChoice = () => {
-  const randomValue = Math.random();
-  if (randomValue < 0.34) {
-    return ROCK;
-  } else if (randomValue < 0.67) {
-    return PAPER;
-  } else {
-    return SCISSORS;
-  }
-};
-
-const getWinner = (
-  cChoice,
-  pChoice = cCHoice === 'ROCK' ? PAPER : DEFAULT_USER_CHOICE
-) =>
-  cChoice === pChoice
-    ? RESULT_DRAW
-    : (cChoice === ROCK && pChoice === PAPER) ||
-      (cChoice === PAPER && pChoice === SCISSORS) ||
-      (cChoice === SCISSORS && pChoice === ROCK)
-    ? RESULT_PLAYER_WINS
-    : RESULT_COMPUTER_WINS;
-
-// if (cChoice === pChoice) {
-//   return RESULT_DRAW;
-// } else if (
-//   (cChoice === ROCK && pChoice === PAPER) ||
-//   (cChoice === PAPER && pChoice === SCISSORS) ||
-//   (cChoice === SCISSORS && pChoice === ROCK)
-// ) {
-//   return RESULT_PLAYER_WINS;
-// } else {
-//   return RESULT_COMPUTER_WINS;
-// }
-
-startGameBtn.addEventListener('click', () => {
-  if (gameIsRunning) {
-    return;
-  }
-  gameIsRunning = true;
-  console.log('Game is starting...');
-  const playerChoice = getPlayerChoice();
-  const computerChoice = getComputerChoice();
-  let winner;
-  if (playerChoice) {
-    winner = getWinner(computerChoice, playerChoice);
-  } else {
-    winner = getWinner(computerChoice);
-  }
-  let message = `You picked ${playerChoice ||
-    DEFAULT_USER_CHOICE}, computer picked ${computerChoice}, therefore you `;
-  if (winner === RESULT_DRAW) {
-    message = message + 'had a draw.';
-  } else if (winner === RESULT_PLAYER_WINS) {
-    message = message + 'won.';
-  } else {
-    message = message + 'lost.';
-  }
-  alert(message);
-  gameIsRunning = false;
-});
-
-
-const sum = (...data) => {
-  const isValidate = (data) => {
-     return isNaN(data) ? 0 : data
-  }
-
-  if(isValidate()){
-    let total = 0;
-    for(const nilai of data){
-        total += nilai;
-    }
-
-    return total;
-  }
-
-  alert('Invalid Request 404');
+for(const item of personData.keys()){
+    console.log(item)
 }
 
-console.log(sum(1,2,3,4));
+
+// console.log(dataMap.get(objk));
+
+// for(const item of dataMap){
+//     console.log(item);
+// }
+
+for(const [key, value] of personData){
+    console.log(key,value);
+}
+
+// const ids = new Set([11,56,66,78,11])
+
+// ids.add()
+
+
+// console.log(ids.values());
+
+// console.log(ids.has(data));
+
+// ids.delete(56)
+// console.log(ids.values());
+
+
+// const ids = [11,56,66,78,11]
+// ids.splice(1,1)
+// console.log(ids);
+
+
+// const dataSet = []
+// for(const item2 of ids.values()){
+//     dataSet.push(item2)
+// }
+// console.log(dataSet[0])
+// output : 11
+
