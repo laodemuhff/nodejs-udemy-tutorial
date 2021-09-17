@@ -6,16 +6,22 @@ const movieList = document.getElementById('movieList')
 
 //define pointer to element button add
 const addButton = document.getElementById('addButton')
+const filterButton = document.getElementById("filterButton")
 
 // define render function
-const renderItem = () => {
-  movieList.innerHTML = ""
-   movies.forEach((movie) => {
+const renderItem = (keyword = '') => {
+   movieList.innerHTML = ""
+   
+   const filteredMovies = keyword !== '' ? 
+                          movies.filter(movie =>     
+                             movie.info.title.includes(keyword)) : 
+                          movies
+   filteredMovies.forEach((movie) => {
       const newEl = document.createElement('li')
-      let text = movie.info.title + ' - '
+      let text = movie.info.title + ' - ';
       for(const key in movie.info){
          if(key !== 'title'){
-           text = text + ` ${key} : ${movie.info[key]}`
+            text += ` ${key} : ${movie.info[key]}`
          }
       }
       newEl.textContent = text
@@ -44,15 +50,18 @@ const addHandler = () => {
    }
    movies.push(newMovie)      
    renderItem()
-
 }
 
-// add event listener to user click on btnAdd
+
+const filterHandler = () => {
+   const keyword = document.getElementById('filter').value
+   renderItem(keyword)
+ }
+ 
+ 
+
+// add event listener to user click on addButton
 addButton.addEventListener('click', addHandler)
 
-
-const person = {
-  salary : 5000000
-}
-
-console.log(person['salary']);
+// add event listener to user click on searchButton
+filterButton.addEventListener('click', filterHandler)
