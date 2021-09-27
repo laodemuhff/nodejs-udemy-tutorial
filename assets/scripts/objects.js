@@ -1,67 +1,121 @@
-// define list of movies as global
-const movies = [];
+// let multiplier = 1.1
 
-// define pointer to list of movies
-const movieList = document.getElementById('movieList')
+// const calculateTax = amount => {
+//     console.log('tax : ', tax)
+//     console.log('multiplier:', multiplier)
+//     return amount * tax * multiplier;
+// }
 
-//define pointer to element button add
-const addButton = document.getElementById('addButton')
-const filterButton = document.getElementById("filterButton")
+// function defineTax(tax, multiplier){
+//   return calculateTax;
+// }
 
-// define render function
-const renderItem = (keyword = '') => {
-   movieList.innerHTML = ""
-   
-   const filteredMovies = keyword !== '' ? 
-                          movies.filter(movie =>     
-                             movie.info.title.includes(keyword)) : 
-                          movies
-   filteredMovies.forEach((movie) => {
-      const newEl = document.createElement('li')
-      let text = movie.info.title + ' - ';
-      for(const key in movie.info){
-         if(key !== 'title'){
-            text += ` ${key} : ${movie.info[key]}`
-         }
+
+// const incomeTax = defineTax(0.25, 1)
+// const VAT = defineTax(0.19,2)
+
+
+
+// console.log(incomeTax(100))
+// console.log(VAT(200))
+
+// console.log(typeof 1)
+
+
+// const getLocBtn = document.getElementById('locBtn')
+
+function setTimer(duration) {
+  const promise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+       resolve('Timer 2s Done!');
+    }, duration)
+  });
+
+  return promise;
+}
+
+function getLocation(){
+  const promise = new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      dataPost => {
+        resolve(dataPost)
+      },
+      error => {
+        reject(error)
       }
-      newEl.textContent = text
-      movieList.append(newEl)
-   });
+    )
+  });
+
+  return promise;
 }
 
-// define adding item function
-const addHandler = () => {
-  const title = document.getElementById('title').value
-  const extraKey = document.getElementById('extraKey').value
-  const extraValue = document.getElementById('extraValue').value
-  if(title.trim() === "" ||
-     extraKey.trim() === "" ||
-     extraValue.trim() === ""
-  )
-     return 
+const getLocBtn = document.getElementById('locBtn')
 
-  const newMovie = {
-     info : {
-        title,
-        [extraKey] : extraValue 
-     },
-     id : Math.random()
+async function trackUserLocation(){
+  let posData;
+  let result;
+  try{
+    posData = await getLocation();
+    result = await setTimer(2000)
+  }catch(error){
+    console.log(error)
+  }
 
-   }
-   movies.push(newMovie)      
-   renderItem()
+  console.log(result, posData)
+
+  setTimer(0).then(() => {
+    console.log('Timer 0s Done...')
+  })
+  console.log('Get Your Location...')
 }
 
+// getLocBtn.addEventListener('click', trackUserLocation)
 
-const filterHandler = () => {
-   const keyword = document.getElementById('filter').value
-   renderItem(keyword)
- }
- 
- 
+// function trackUserLocation(){
+//   let positionData
 
-// add event listener to user click on addButton
-addButton.addEventListener('click', addHandler)
+//   getLocation()
+//     .then(posData => {
+//        positionData = posData
+//        return setTimer(2000);
+//     })
+//     .then(result => {
+//        console.log(success, positionData)
+//     })
+//     .catch(err => {
+//         console.log(err)
+//     })
 
-// add event listener to user click on searchButton
-filterButton.addEventListener('click', filterHandler)
+//   setTimer(0).then(() => {
+//     console.log('Testing Done...')
+//   })
+//   console.log('Get Your Location...')
+// }
+
+// function trackUserLocation(){
+//   navigator.geolocation.getCurrentPosition(
+//     posData => {
+//          setTimeout(() => {
+//            console.log(posData)
+//          }, 2000)
+//     }, error => {
+//          let result = 0
+//          for(let i = 0; i < 1000000000; i++){
+//            result += i
+//          }
+//          console.log(result)
+//     })
+
+//   setTimeout(() => {
+//     console.log("Testing Code..")
+//   }, 0)
+
+//   console.log('Get Your Location...')
+// }
+
+getLocBtn.addEventListener('click', trackUserLocation)
+
+
+
+
+
